@@ -387,3 +387,15 @@ print(numar([2,3,4,5]))
 print(cife([2,3,4,5]))
 
 #-------------------------------------------------------------------------
+
+#EX 10
+'''
+Scrieți o funcție care elimină duplicatele consecutive: ia ca parametru o listă și construiește o listă în care toate 
+secvențele de elemente consecutive egale au fost înlocuite cu un singur element.
+'''
+
+def duplicate(l):
+    return list(set(l))
+
+print(duplicate([2,2,3,4,5,5]))
+
