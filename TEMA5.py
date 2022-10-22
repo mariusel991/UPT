@@ -1,5 +1,6 @@
-# P1
-
+# ####################################################################################################################
+#                                                     PARTEA I                                                       #
+######################################################################################################################
   # EX 1)
   
  '''
@@ -242,3 +243,53 @@ def firstn(l, n):
 print(firstn([3,2,4,6,1,9], 2))
 
 #----------------------------------------------------------------------------------------------
+
+####################################################################################################
+#                                   PARCURGERI DE LISTE                                            #
+####################################################################################################
+
+#EX 5
+#a)
+'''
+ Implementați o funcție numita filter, cu acelasi comportament ca si functia predefintita filter, folosind reduce().
+'''
+
+def filter2(lista, conditie):
+    return functools.reduce(lambda lista_noua, element: [element] + lista_noua if conditie(element) else lista_noua,
+                            lista, [])
+
+
+print("filter2 = ", end="")
+print(filter2([1, 2, 3, 4], lambda x: x % 2 == 0))
+
+#b)
+'''
+ Implementați funcția exists care determină (returnează adevărat/fals) dacă există
+ un element din listă care satisface o condiție (o funcție de element cu valoare booleană, dată ca parametru).
+'''
+
+import functools
+def exists(lista, cond):
+    return True if functools.reduce(lambda acc, x: acc + 1 if cond(x) else acc + 0, lista, 0) > 0 else False
+
+print(exists([2,4,5,6], lambda x: x==7))
+
+# Programul verifica daca in lista exista un element 7
+'''
+in reduce functia lambda are obligatoriu 2 param.
+    - pirmul acc se refera la val acumulata, se initializeaza la final dupa ,lista cu 0
+    - al doolea argument, x se refera la elementul curent din lista care conditia
+    - in if, if(x) deoarece verificam pentru elementul x conditia propusa
+'''
+
+#-----------------------------------------------------------------------------------------------------------
+
+#EX 6
+#a)
+
+'''
+Implementați folosind reduce o funcție countif care ia ca parametru o funcție f cu valori boolene și o 
+listă și returnează numărul de elemente pentru care funcția f e adevărată.
+'''
+
+
