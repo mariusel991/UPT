@@ -367,3 +367,19 @@ print(partition(lambda x: x >=5, [4,6,7,5,4,8,9]))
 
 #EX 9
 
+import functools
+
+#M1
+
+def numar(l):
+    return functools.reduce(lambda nr, x: nr*10 + x, l, 0)
+
+#M2
+def cife(lista):
+    if (len(lista) > 1):
+        return lista[-1] + 10 * cife(lista[:-1])
+    else:
+        return lista[0]
+
+print(numar([2,3,4,5]))
+print(cife([2,3,4,5]))
