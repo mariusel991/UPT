@@ -181,6 +181,64 @@ def cifre_c(lista, cond):
     else:
         return 0
 
-print(cifre_c(lisa,lambda x: x%3==1)
+print(cifre_c(lisa,lambda x: x%3==1))
+
+#------
+from functools import reduce
+
+def cr_lst_red(lista, cond):
+    return reduce(lambda acc, element: acc*10 + element if cond(element) else acc,lista,0)
+
+print(cr_lst_red([1, 2, 3, 4,6,7], lambda x: x % 2 == 0))
+#------
+
+def create_nr_reduce_filter(lista, cond):
+    elem_filtru = filter(cond, lista)
+    return functools.reduce(lambda acc, element: acc*10 + element, elem_filtru, 0)
 
 
+print(create_nr_reduce_filter([2,3,4,5,6,7,8,9], lambda x:x%2==1))
+
+#EX 2
+'''
+Implementați funcția fromto care generează lista numerelor întregi dintr-un interval dat, scrieți o funcție care creează
+lista tuturor întregilor dintr-un interval dat, divizibili cu o valoare dată d.
+Indicație: Găsiți cel mai mare număr divizibil din interval, și continuați pas cu pas.
+'''
+
+def fromto(a,b,d, rez=[]):
+    if(a<=b):
+        if(a%d == 0):
+            rez.append(a)
+            fromto(a+1,b,d)
+        else:
+            fromto(a+1,b,d)
+    else:
+        print(rez)
+    return ""
+
+print(fromto(12,20,2))
+
+#EX 3
+#a)
+'''
+Implementați funcția nth care returnează al n-lea element dintr-o listă.
+'''
+
+def nth(l,i):
+    return l[i-1]
+
+print("indicele cu numarul 3 =",nth([2,3,4,5,52], 3))
+
+#----
+#b)
+'''
+Implementați o funcție firstn care returnează o listă cu primele n elemente dintr-o listă dată.
+'''
+
+def firstn(l, n):
+    return l[:n]
+
+print(firstn([3,2,4,6,1,9], 2))
+
+#----------------------------------------------------------------------------------------------
