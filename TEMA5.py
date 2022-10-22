@@ -366,7 +366,9 @@ print(partition(lambda x: x >=5, [4,6,7,5,4,8,9]))
 #---------------------------------------------------------------------------------
 
 #EX 9
-
+'''
+Scrieți o funcție care ia o listă de cifre și returnează valoarea numărului cu cifrele respective.
+'''
 import functools
 
 #M1
@@ -383,3 +385,5 @@ def cife(lista):
 
 print(numar([2,3,4,5]))
 print(cife([2,3,4,5]))
+
+#-------------------------------------------------------------------------
