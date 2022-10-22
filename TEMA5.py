@@ -292,4 +292,78 @@ Implementați folosind reduce o funcție countif care ia ca parametru o funcție
 listă și returnează numărul de elemente pentru care funcția f e adevărată.
 '''
 
+import functools
+
+def countif(f, lista):
+    return functools.reduce(lambda intial, element: intial + 1 if f(element) else intial, lista, 0)
+
+print(countif(lambda x:x%2==1, [2,3,4,5,7,9]))
+#---
+#b)
+
+import functools
+
+def sumif(f, lista):
+    return functools.reduce(lambda intial, element: intial + element if f(element) else intial, lista, 0)
+
+print(sumif(lambda x:x%2==0, [2,3,4,5,7,9,10]))
+
+#--------------------------------------------------------------------------------------------------
+
+#EX 7
+'''
+Implementați funcțiile split și combine care transformă o listă de perechi într-o pereche de liste, și invers.
+Ex: split([ (1,2), (3,4), 5,6)]) -> ([1,3,5], [2,4,6])  
+
+combine([1,3,5], [2,4,6]) -> [ (1,2), (3,4), 5,6)]
+'''
+
+#--------------------------------------------------------------------------------------------------
+
+#EX 8
+
+'''
+Implementați funcția partition care ia ca parametru o funcție cu valori boolene și o listă și returnează o pereche de liste, cu elementele care satisfac, respectiv nu satisfac funcția f.
+# partition (lambda x : x >= 5) [4,6,7,5,4,8,9] -> ([6, 7, 5, 8, 9], [4, 4])
+'''
+
+#### VARIANTA SUS(PECTA) ####
+
+import functools
+# partition (lambda x : x >= 5) [4,6,7,5,4,8,9] -> ([6, 7, 5, 8, 9], [4, 4])
+
+def nott(f):
+    @functools.wraps(f)
+    def g(*args,**kwargs):
+        return not f(*args,**kwargs)
+    g.__name__ = f'negate({f.__name__})'
+    return g
+
+def partition(f, lista):
+    rez1 = list(filter(f, lista))
+    rez2 = list(filter(nott(f), lista))
+    print(rez1, rez2)
+
+#Disclaimer: Partea cu functia nott e copiata pentru ca nu aveam idee de cum pot nega o functie lambda (expresia), ex: lambda x: x <=5 ---> lambda x: not(x<=5)
+
+
+### VARIANTA LEGIT ###
+
+def partition(f, lista):
+    def part_aux(f, lista, rez1=[], rez2=[]):
+        if(len(lista) > 0):
+            h = lista[0]
+            t = lista[1:]
+            rez1.append(h) if f(h) else rez2.append(h)
+            part_aux(f, t)
+        else:
+            print (rez1, rez2)
+    part_aux(f,lista)
+
+
+print(partition(lambda x: x >=5, [4,6,7,5,4,8,9]))
+
+#---------------------------------------------------------------------------------
+
+#EX 9
 
