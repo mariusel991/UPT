@@ -429,7 +429,6 @@ def interclasare(l1, l2):
         else:
             sol.append(l2[j])
             j=j+1
-        k+=1
 
     while(i<len(l1)):
         sol.append(l1[i])
