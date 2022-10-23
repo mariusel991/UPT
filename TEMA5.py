@@ -399,3 +399,47 @@ def duplicate(l):
 
 print(duplicate([2,2,3,4,5,5]))
 
+#EX 11
+
+#------
+
+
+
+#EX 12
+
+'''
+Scrieți o funcție care interclasează două liste, fiecare ordonată crescător, adică returnează lista cu elementele din ambele liste, ordonate.
+Comparați primele elemente din ambele liste pentru a decide care va fi primul în rezultat, și apoi continuați cu listele rămase. 
+'''
+
+lista1 = [1,3,5,5,5,7,9,11,14]
+lista2 = [5,6,8,10,12,15,19,20,21]
+
+def interclasare(l1, l2):
+    i = 0
+    j = 0
+    sol = []
+
+    while(i < len(l1) and j < len(l2)):
+        if(l1[i] < l2[j]):
+            sol.append(l1[i])
+            i=i+1
+        else:
+            sol.append(l2[j])
+            j=j+1
+        k+=1
+
+    while(i<len(l1)):
+        sol.append(l1[i])
+        i=i+1
+
+    while (j < len(l2)):
+        sol.append(l2[j])
+        j = j + 1
+
+    return sol
+
+print(interclasare(lista1,lista2))
+
+#-------------------------------------------------------------------------------
+
