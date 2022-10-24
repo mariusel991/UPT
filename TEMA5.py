@@ -225,6 +225,19 @@ print(fromto(12,20,2))
 '''
 Implementați funcția nth care returnează al n-lea element dintr-o listă.
 '''
+lista1 = [1,3,5,5,5,7,9,11,14]
+lista2 = [5,6,8,10,12,15,19,20,21]
+
+def nth1(lista, i, k=0):
+    if (k == i - 1):
+        rez = lista[0]
+        return rez
+    else:
+        return nth(lista[1:], i, k+1)
+
+### SAU ###
+
+print(nth1(lista1, 3))
 
 def nth(l,i):
     return l[i-1]
@@ -236,6 +249,21 @@ print("indicele cu numarul 3 =",nth([2,3,4,5,52], 3))
 '''
 Implementați o funcție firstn care returnează o listă cu primele n elemente dintr-o listă dată.
 '''
+
+lista1 = [1,3,5,5,5,7,9,11,14]
+lista2 = [5,6,8,10,12,15,19,20,21]
+
+def firstn1(lista, i, k=0, sol=[]):
+    if (k <= i - 1):
+        sol.append(lista[k])
+    else:
+        return sol
+    return firstn1(lista, i, k+1)
+
+
+print(firstn1(lista1, 3))
+
+### SAU ###
 
 def firstn(l, n):
     return l[:n]
