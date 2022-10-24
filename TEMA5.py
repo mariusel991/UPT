@@ -482,14 +482,84 @@ câte un element în fiecare din liste. (Funcția va returna o pereche de liste)
 lista1 = [1,3,5,5,5,7,9,11,14]
 lista2 = [5,6,8,10,12,15,19,20,21]
 
-def desparte(l1):
+def desparte_rec(lst, st =[], dr=[], i=1):
+    if(len(lst)>0):
+        h = lst[0]
+        t = lst[1:]
+        if (i % 2 == 1):
+            st.append(h)
+        else:
+            dr.append(h)
+        return desparte_rec(t, i=i+1)
+    else:
+        return st,dr
 
-    lung = len(l1)
-    lisa_stanga  = l1[:lung//2]
-    lisa_dreapta = l1[lung//2:]
-
-    print(lisa_stanga, lisa_dreapta)
-
-print(desparte(lista1))
+print(desparte_rec(lista1))
 
 #-------------------------------------------------------------------------------
+
+#EX 14
+
+'''
+
+'''
+
+
+lista3= [23,32,45,2,5,8,1,6,8,19]
+
+def interclass(l1):
+    def interclasare(l1, l2):
+        i = 0
+        j = 0
+        sol = []
+
+        while (i < len(l1) and j < len(l2)):
+            if (l1[i] < l2[j]):
+                sol.append(l1[i])
+                i = i + 1
+            else:
+                sol.append(l2[j])
+                j = j + 1
+
+        while (i < len(l1)):
+            sol.append(l1[i])
+            i = i + 1
+
+        while (j < len(l2)):
+            sol.append(l2[j])
+            j = j + 1
+
+        return sol
+
+
+    def desparte_rec(lst, st=[], dr=[], i=1):
+        if (len(lst) > 0):
+            h = lst[0]
+            t = lst[1:]
+            if (i % 2 == 1):
+                st.append(h)
+            else:
+                dr.append(h)
+            return desparte_rec(t, i=i + 1)
+        else:
+            return interclasare(qs(st), qs(dr))
+
+
+    def qs(lst):
+        if (len(lst) == 0):
+            return []
+        elif (len(lst) == 1):
+            return [lst[0]]
+        else:
+            pivot = lst[0]
+            st = []
+            dr = []
+            for i in range(1, len(lst)):
+                if (lst[i] > pivot):
+                    dr.append(lst[i])
+                else:
+                    st.append(lst[i])
+            return qs(st) + [pivot] + qs(dr)
+    return desparte_rec(l1)
+
+print(interclass(lista3))
