@@ -472,3 +472,24 @@ print(interclasare(lista1,lista2))
 
 #-------------------------------------------------------------------------------
 
+#EX 13
+
+'''
+Scrieți o funcție care desparte o listă în două liste a căror lungime diferă cu cel mult 1, punând alternativ
+câte un element în fiecare din liste. (Funcția va returna o pereche de liste).
+'''
+
+lista1 = [1,3,5,5,5,7,9,11,14]
+lista2 = [5,6,8,10,12,15,19,20,21]
+
+def desparte(l1):
+
+    lung = len(l1)
+    lisa_stanga  = l1[:lung//2]
+    lisa_dreapta = l1[lung//2:]
+
+    print(lisa_stanga, lisa_dreapta)
+
+print(desparte(lista1))
+
+#-------------------------------------------------------------------------------
