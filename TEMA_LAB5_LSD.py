@@ -133,6 +133,8 @@ def cifre_a(n):
             return  cifre_a(n//10) + [uc]
         else:
             return cifre_a(n//10) + []
+         
+
 
 
 print(cifre_a(1234567))
@@ -155,6 +157,20 @@ def cifre_conditie(n, conditie):
             return cifre_conditie(n // 10, conditie) + [ultima_cifra]
         else:
             return cifre_conditie(n // 10, conditie)
+          
+# OPTIMIZARE #
+
+def cifre_a_optimizat(n, cond):
+    if(n < 0):
+        return cifre_a_optimizat(abs(n), cond)
+    if(n < 10):
+        if cond(n):
+            return [n]
+    else:
+        return [n%10] + cifre_a_optimizat(n//10, cond) if cond(n%10) else cifre_a_optimizat(n//10, cond)
+
+print(cifre_a_optimizat(-123123, lambda x: x%2==1 and x < 7))
+
 
 
 print("lista cifre cond = ", end="")
