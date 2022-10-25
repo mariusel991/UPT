@@ -33,3 +33,28 @@ lista1 = [7,2,241,35,0,-2,12,77]
 print(quicksort(lista1))
 
 #---------------------------------------------------------------------------------------------
+
+#Conversie Binara din baza 10
+
+def conv_binar(n):
+    if(n == 1):
+        return n
+    elif(n == 0):
+        return 0
+    else:
+        return n%2 + conv_binar(n//2) * 10
+
+print(conv_binar(127))
+
+#Modulo_K LAB3.py
+
+def modulo_p(a, p):
+    def aux(a, p, exp=1, init=a):
+        if(a % p == 1):
+            return exp
+        else:
+            return aux(a*init, p ,exp+1, init)
+    return  aux(a, p)
+
+print(modulo_p(4, 7))
+
