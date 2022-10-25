@@ -1,4 +1,4 @@
-#Quick Sort - LISTE RECURSIV
+#Quick Sort - LISTE RECURSIV - Sort a.i sa apara fiecarele elem sa fie unic
 
 def quicksort(lst):
     if(len(lst) == 0):
