@@ -58,3 +58,15 @@ def modulo_p(a, p):
 
 print(modulo_p(4, 7))
 
+#---------------------------------------------------------------------------
+
+def my_filter(itr, functie):
+    return functools.reduce(lambda acc,elem: [elem] + acc if functie(elem) else acc, itr, [])
+
+print(my_filter([12,34,5,6,2,3], lambda x : x < 10))
+
+def my_map(itr, functie):
+    return functools.reduce(lambda l_nou, x: l_nou + [functie(x)], itr, [])
+
+print(my_map([2,3,4,5], lambda x : x 
+
