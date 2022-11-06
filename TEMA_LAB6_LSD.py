@@ -233,3 +233,44 @@ def for_all(cond1, dictionar2):
     return functools.reduce(lambda rezultat, pereche: True and rezultat if  cond1(pereche) else False, dictionar2.items(), True)
 
 print(for_all(conditie, {'a': 5, 'b': 7, 'c': 1}))
+
+#-------------------------------------------------------------------------------------------/
+
+'''
+5. Implementați cu ajutorul lui reduce funcția map care construiește un dicționar în care toate valorile au fost transformate 
+folosind o funcție dată ca parametru.
+
+Input: {'a': 5, 'b': 7, 'c': 6}, lambda x: x + 1; Output: {'a': 6, 'b': 8, 'c': 7}
+'''
+
+def map_dictionar(dictionar, functie):
+    return functools.reduce(lambda acc, pereche: f(acc, pereche, functie), dictionar.items(), {})
+
+def f(dictionar, pereche, f):
+    cheie, valoare = pereche
+    valoare = f(valoare)
+    dictionar[cheie] = valoare
+    #print(dictionar)
+    return dictionar
+
+print(map_dictionar({'a': 5, 'b': 7, 'c': 6}, lambda x: x + 1))
+
+#--------------------------------------------------------------------------------------------------/
+'''
+6. Scrieți o funcție care primește un dicționar de la șiruri la întregi și o listă de șiruri și returnează mulțimea 
+tuturor valorilor din dicționar care corespund șirurilor din listă.
+
+Input: {'aa': 5, 'bb': 7, 'ca': 6}, ['aa', 'bb', 'c']; Output: {5, 7}
+'''
+
+def ex6(d1, list1):
+    def f_aux(d1, lista, m_final):
+        if len(lista) > 0 :
+            if lista[0] in d1.keys():
+                m_final = m_final | {d1[lista[0]]}
+            return f_aux(d1,lista[1:], m_final)
+        else:
+            return m_final
+    return f_aux(d1, list1, set())
+
+print(ex6({'aa': 5, 'bb': 7, 'ca': 6}, ['aa', 'bb', 'c']))
