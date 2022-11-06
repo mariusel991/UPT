@@ -273,4 +273,9 @@ def ex6(d1, list1):
             return m_final
     return f_aux(d1, list1, set())
 
+
+def ex6_a(d1, lista2): # Alternativa
+    return functools.reduce(lambda m, elem: m | {d1[elem]} if elem in d1.keys() else m, lista2, set())
+
 print(ex6({'aa': 5, 'bb': 7, 'ca': 6}, ['aa', 'bb', 'c']))
+print(ex6_a({'aa': 5, 'bb': 7, 'ca': 6}, ['aa', 'bb', 'c']))
