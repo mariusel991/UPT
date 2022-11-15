@@ -3,7 +3,7 @@ def graf_serelule(graf, lista):
         nod, nod_asociat = lista[0]
         if nod_asociat not in graf[nod]:
             graf[nod]+= [nod_asociat]
-        return  graf_serban(graf, lista[1:])
+        return  graf_serelule(graf, lista[1:])
     else:
         return graf
 
