@@ -7,4 +7,4 @@ def graf_serelule(graf, lista):
     else:
         return graf
 
-print(graf_serban({1:[2,3,4], 2:[1,3], 3:[1,4], 4:[1,3]} ,[(2,4), (3,2)]))
+print(graf_serelule({1:[2,3,4], 2:[1,3], 3:[1,4], 4:[1,3]} ,[(2,4), (3,2)]))
