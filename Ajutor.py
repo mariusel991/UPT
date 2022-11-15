@@ -1,4 +1,4 @@
-def graf_serban(graf, lista):
+def graf_serelule(graf, lista):
     if len(lista) > 0:
         nod, nod_asociat = lista[0]
         if nod_asociat not in graf[nod]:
