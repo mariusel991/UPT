@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 int prelucreaza(const char *str){
-    int k = 1;
+    int k = 0;
     for(int i = 0; i < strlen(str) - 1; i++){
         ///printf("%d", k);
         if(str[i] != str[i+1]){
