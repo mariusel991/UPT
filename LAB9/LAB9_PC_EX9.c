@@ -25,10 +25,11 @@ r = 2
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 
 
-int string_replace(char *where, const char *what, const char *replace){
+uint32_t string_replace(char *where, const char *what, const char *replace){
     char* subsir = strstr(where, what); /// subsir - "mere delicioase\0"
     if(subsir == NULL){
         return 0;/// nu am gasit cu ce sa inlocuim in sursa - practic nu am gasit *what in *subsir deci nu se poate face nici o inlocuire
