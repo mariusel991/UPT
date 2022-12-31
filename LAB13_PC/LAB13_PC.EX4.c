@@ -1,62 +1,102 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define CHUNK 16
-#define ARRAY_CHUNK 8
-#define ARRAY_SIZE 16
 
-void BubbleSort(char **v, size_t n)
-{
-    int s,i;
-    char *aux = NULL;
-    do{
-        s = 0;                             // setam faptul ca nu au avut loc schimbari la iterarea curenta
-        for (i = 1; i < n; i++)
-        {      
-        // @1 - pornim de la 1 ca sa formam perechi (v[i-1],v[i])
-            if(strcmp(v[i-1],v[i]) > 0)
-            {             
-                // daca valorile NU respecta relatia de ordine
-                aux = v[i - 1];                 // interschimba valorile
-                v[i - 1] = v[i];
-                v[i] = aux;
-                s = 1;                             // @2 - seteaza faptul ca a avut loc cel putin o schimbare
-            }
-        }
-    } while(s);                         // daca s adevarat (!=0), atunci repeta iterarea
-}
+#define ARRAY_CHUNK 2
+#define ARRAY_SIZE 10
 
-void print_array(FILE *f, char **array, const size_t size){
-    char **p;
-    size_t i = 0;
-    p = array;
+char *read_line(FILE *fp);
+char **read_more_lines(FILE *fp);
+void free_lines(char **lines);
+void print_lines(char **lines);
+void BubbleSort(char **lines, const size_t n);
+size_t strlen_array(char **array);
+
+int main(){
+    FILE *f;
+    char **s = NULL;
+    size_t lung = 0;
+    f = fopen("scrisoare.txt","r");
     
-    while(i < size){
-        fprintf(f,"%s", p[i++]);
-        //printf("%s", p[i++]);
+    if(f == NULL){
+        perror("ERROR: ");
+        exit(1);
     }
+    
+    s = read_more_lines(f);
+    //print_lines(s);
+    lung = strlen_array(s);
+    BubbleSort(s,lung);
+    print_lines(s);
+    
+    
+    free_lines(s);
+    free(s);
+    fclose(f);
+    
+    return 0;
 }
 
-char *read_line_file(FILE *f){
-    char *line = NULL;
-    int ch = 0;
-    int i = 0;
-    int line_size = 0;
-    char *tmp;
+char **read_more_lines(FILE *fp){
+
+    char **lines = NULL;
+    char *curent_line = NULL;
+    size_t i = 0;
+    size_t length = 0;
     
-    while((ch = fgetc(f)) != EOF){
-        if(i == line_size){
+    while((curent_line = read_line(fp)) != NULL){
+        
+        if(i == length){
+            length = length + ARRAY_CHUNK;
             
-            line_size = line_size + CHUNK;
-            tmp = realloc(line, line_size*sizeof(char));
-            
-            if(tmp == NULL){
-                fprintf(stderr,"Read Error\n");
-                exit(1);
+            lines = realloc(lines, length*sizeof(char*));
+            if(lines == NULL){
+                fprintf(stderr,"Allocating error 2\n");
+                return NULL;
             }
-            line = tmp;
         }
+        
+        lines[i++] = curent_line;
+    }
+    
+    if(lines != NULL){
+        
+        if(i == length){
+            length++;
+            
+            lines = realloc(lines, length*sizeof(char*));
+            if(lines == NULL){
+                fprintf(stderr,"Allocating error 2\n");
+                return NULL;
+            }
+        }
+        
+        lines[i] = NULL;
+    }
+    
+    return lines;
+}
+
+char *read_line(FILE *fp){
+    
+    char *line = NULL;
+    size_t i = 0;
+    size_t length = 0;
+    size_t ch = 0;
+    
+    while((ch = fgetc(fp)) != EOF){
+        if(i == length){
+            length = length + CHUNK;
+            
+            line = realloc(line,length*sizeof(char));
+            if(line == NULL){
+                fprintf(stderr,"Allocating error 1\n");
+                return NULL;
+            }
+        }
+        
         if(ch != '\n'){
             *(line + i++) = ch;
         }
@@ -66,114 +106,72 @@ char *read_line_file(FILE *f){
     }
     
     if(line != NULL){
-        if(i == line_size){
-            line_size+=2;
-            tmp = realloc(line, line_size*sizeof(char));
-            
-            if(tmp == NULL){
-                free(line);
-                fprintf(stderr,"Error allocating memory in read_line_file()!\n");
-                exit(-1);
+    
+        if(i == length){
+            length++;;
+            line = realloc(line,length*sizeof(char));
+            if(line == NULL){
+                fprintf(stderr,"Allocating error 1\n");
+                return NULL;
             }
-            line = tmp;
         }
-        *(line + i++) = '\n';
+        
         *(line + i) = 0;
-        
     }
+    
     return line;
-    
 }
 
-char **read_lines(FILE *fp){
-    
-    char **lines = NULL;
-    char *current_line = NULL;
-    size_t i = 0;
-    size_t lines_size = 0;
-    
-    while((current_line = read_line_file(fp)) != NULL){
-        
-        if(i == lines_size){
-            
-            lines_size = lines_size + ARRAY_CHUNK;
-            lines = realloc(lines, lines_size*sizeof(char *));
-            if(lines == NULL){
-                fprintf(stderr,"Error allocating memory in read_lines()\n ");
-                exit(-1);
-            }
-        }
-        *(lines + i++) = current_line;
-    }
-    
-    if(i == lines_size){
-            
-        lines_size++;
-        char **tmp;
-        tmp = realloc(lines, lines_size*sizeof(char *));
-        
-        if(tmp == NULL){
-            free(lines);
-            fprintf(stderr,"Error allocating memory in read_lines()\n ");
-            exit(-1);
-        }
-        lines = tmp;
-    }
-    *(lines + i) = NULL;
-    return lines;
-}
-
-void free_lines(char **array){
-    char **p;
-    p = array;
+void free_lines(char **lines){
+    char **p = lines;
     
     while(*p != NULL){
-        printf("%s" ,*p);
         free(*p);
         p++;
     }
-    
 }
 
-void write_sort(char **lines, char *filepath){
-    char **p;
-    FILE *f;
-    size_t array_size = 0;
+void print_lines(char **lines){
+    char **p = lines;
+    size_t i = 0;
     
     while(*p != NULL){
-        array_size++;
+        printf("%ld - %s\n", i, *p);
+        i++;
+        p++;
+    }
+    free(*p);
+}
+
+void BubbleSort(char **lines, size_t n)
+{
+    int s,i;
+    char *aux = NULL;
+    do{
+        s = 0;                             // setam faptul ca nu au avut loc schimbari la iterarea curenta
+        for (i = 1; i < n; i++)
+        {      
+        // @1 - pornim de la 1 ca sa formam perechi (v[i-1],v[i])
+            if(strcmp(lines[i-1],lines[i]) > 0)
+            {             
+                // daca valorile NU respecta relatia de ordine
+                aux = lines[i - 1];                 // interschimba valorile
+                lines[i - 1] = lines[i];
+                lines[i] = aux;
+                s = 1;                             // @2 - seteaza faptul ca a avut loc cel putin o schimbare
+            }
+        }
+    } while(s);                         // daca s adevarat (!=0), atunci repeta iterarea
+}
+
+size_t strlen_array(char **array){
+    char **p;
+    int i = 0;
+    
+    while(*p != NULL){
+        i++;
         p++;
     }
     
-    BubbleSort(lines,array_size);
-    
-    f = fopen(filepath,"w");
-    if(f == NULL){
-        perror("Error: ");
-        exit(1);
-    }
-    
-    print_array(f,lines, array_size);
-    fclose(f);
+    return i;
 }
-
-
-int main(){
-    FILE *file;
-    char **linii = NULL;
-    
-    file = fopen("scrisoare.txt","r");
-    if(file == NULL){
-        perror("Error: ");
-        exit(1);
-    }
-    
-    linii = read_lines(file);
-    ///write_sort(linii,"file.txt");
-    
-    free_lines(linii);
-    free(linii);
-    return 0;
-}
-
-///DE REFACUT TOT!!!
