@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include <stdint.h>
 
 #define CHUNK 16
 
@@ -13,28 +15,37 @@ void free_lines(char **lines);
 void print_lines(char **lines);
 void BubbleSort(char **lines, const size_t n);
 size_t strlen_array(char **array);
+void write_sort(char **array, char *filepath);
+void write_random(char **lines, char *filepath);
+void shuffle_array(char **array, size_t length);
+uint32_t find_word(char **lines, char *word);
 
 int main(){
     FILE *f;
     char **s = NULL;
-    size_t lung = 0;
+    //uint32_t nr_ap = 0;
     f = fopen("scrisoare.txt","r");
     
     if(f == NULL){
-        perror("ERROR: ");
+        perror("ERROR");
         exit(1);
     }
     
     s = read_more_lines(f);
-    //print_lines(s);
-    lung = strlen_array(s);
-    BubbleSort(s,lung);
-    print_lines(s);
+    fclose(f);
     
+    //print_lines(s);
+    
+    write_sort(s,"anexa1.txt");
+    write_random(s,"anexa2.txt");
+    find_word(s,"sultan");
+    //nr_ap = find_word(s,"sultan");
+    //printf("%u\n",nr_ap);
+    
+    ///print_lines(s);
     
     free_lines(s);
     free(s);
-    fclose(f);
     
     return 0;
 }
@@ -129,6 +140,7 @@ void free_lines(char **lines){
         free(*p);
         p++;
     }
+    free(*p);
 }
 
 void print_lines(char **lines){
@@ -140,7 +152,6 @@ void print_lines(char **lines){
         i++;
         p++;
     }
-    free(*p);
 }
 
 void BubbleSort(char **lines, size_t n)
@@ -165,8 +176,8 @@ void BubbleSort(char **lines, size_t n)
 }
 
 size_t strlen_array(char **array){
-    char **p;
-    int i = 0;
+    char **p = array;
+    size_t i = 0;
     
     while(*p != NULL){
         i++;
@@ -174,4 +185,88 @@ size_t strlen_array(char **array){
     }
     
     return i;
+}
+
+void write_sort(char **array, char *filepath){
+    
+    ///Deschidem / creem fisierul filepath pt scriere
+    FILE *fp;
+    fp = fopen(filepath,"w");
+    if(fp == NULL) return; /// Fisierul nu a putut fi creat
+    
+    ///Sortam array-ul
+    size_t lung = strlen_array(array);
+    BubbleSort(array,lung);
+    
+    ///scriem in filepath array-ul nostru
+    char **p = array;
+    
+    while(*p != NULL){
+        fprintf(fp,"%s\n",*p);
+        p++;
+    }
+    
+    ///Inchidem fisierul
+    fclose(fp);
+}
+
+void shuffle_array(char **array, size_t length){
+    
+    if(array == NULL || length < 2){
+        return;
+    }
+    
+    srand(time(NULL));
+    ///Algoritmul Fisher-Yates pt shuffle array-ului
+    
+    for(size_t i = length - 1; i > 0; i--){
+        
+        size_t j = rand() % (i + 1);
+        char *temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
+}
+
+uint32_t find_word(char **lines, char *word){
+    
+    uint32_t k = 0;
+    char **p = lines;
+    char *aux;
+    
+    while(*p != NULL){
+        aux = *p;
+        
+        while(strstr(aux,word) != NULL){
+            k++;
+            aux++;
+        }
+        p++;
+    }
+    
+    printf("Cuvantul %s apare de %u ori\n",word,k);
+    return k;
+}
+
+void write_random(char **lines, char *filepath){
+    
+    FILE *f;
+    size_t lung = strlen_array(lines);
+    /// Deschidem fisierul fp pt scriere aleatorie a array-ului
+    f = fopen(filepath,"w");
+    if(f == NULL) return;
+    
+    ///Amestecam sirul
+    shuffle_array(lines,lung);
+    
+    ///Scrierem in fisierul cu calea flilepath
+    char **p = lines;
+    
+    while(*p != NULL){
+        fprintf(f,"%s\n",*p);
+        p++;
+    }
+    
+    fclose(f);
 }
