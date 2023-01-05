@@ -50,7 +50,7 @@ void copy_bin2file(FILE *in, FILE *out){
     
     ///Creeam un buffer temporar pt a retine informatia
     char buffer[BUFFER_SIZE];
-    long int bytes_read;
+    size_t bytes_read;
     
     /*
     char *read_buffer = malloc(BUFFER_SIZE);
@@ -65,15 +65,21 @@ void copy_bin2file(FILE *in, FILE *out){
     while((bytes_read = fread(buffer,1,BUFFER_SIZE,in)) > 0){///Am putut citi cel putin un bytes
         
          // Write the data to the destination file
-        if (fwrite(buffer, 1, bytes_read, out) != bytes_read) {
-            fprintf(stderr, "Error writing to file\n");
-            fclose(in);
-            fclose(out);
-            ///free(read_buffer);
-            exit(4);
+        size_t bytes_written = fwrite(buffer,1,bytes_read,out);
+        
+        ///Verificam daca am putut scrie
+        if(bytes_written < bytes_read){
+            
+            ///Verificam daca avem eroare de scriere
+            if(ferror(out) != 0){
+                perror("Error writing to file");
+                clearerr(out);
+            }
+            else{
+                fprintf(stderr,"Incomplete writing to file\n");
+            }
+            return;
         }
         
     }
 }
-
-
