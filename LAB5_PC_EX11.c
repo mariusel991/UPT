@@ -1,41 +1,42 @@
 #include <stdio.h>
 #include <stdint.h>
 
-void print_bit(uint8_t x){
-  uint8_t mask = 1 << 7;
-  for(int i = 0; i < 8; i++){
-    if(x & mask){
-      printf("1");
+void print_bit_32 (uint32_t nr)
+{
+  uint32_t mask = 0x80000000; 
+  uint8_t i = 0;
+  for (i = 0; i < 32; i++)
+    {
+      if ((nr & mask) == 0)
+        {
+          printf ("0");
+        }
+      else
+        {
+          printf ("1");
+        }
+      mask = mask >> 1; 
     }
-    else{
-      printf("0");
-    }
-    mask = mask >> 1;
-  }
-  printf("\n");
+  printf ("\n");
 }
 
-int main(){
-  uint8_t n, mask;
-  uint8_t s = 0;
-
-  scanf("%hu", &n);
-
-  mask = 1 << 3;
-
-  for(int i = 0; i < 4; i++){
-    s = s + (n & mask);
-    mask = mask >> 1;
-  }
-  printf("%u\n", s);
-  print_bit(s);
-  
-  
-  
-
-  return 0;
-  
-  
+int main ()
+{
+    int s = 0;
+    uint32_t n , mask;
+    scanf("%u" , &n);
+    mask = 1;
+    for ( int i = 0 ; i < 4 ; i++)
+    {
+        mask = 1 << i;
+        if ( (n & mask) != 0)
+        {
+            s++;
+        }
+    }
+    print_bit_32(n);
+    printf("%d\n" , s);
+    return 0;
 }
 
 /*
