@@ -45,7 +45,7 @@ void eliminare_separatori(char *str){
                 aux++;
             }
             
-            if(sep_count != 1){
+            if(sep_count != 0){
                 strcpy(str+poz,str+poz+sep_count);
             }
             
