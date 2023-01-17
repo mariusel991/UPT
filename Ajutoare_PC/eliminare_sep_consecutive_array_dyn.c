@@ -91,7 +91,7 @@ char *read_line(){
     
         
     }
-        ///verificam daca mai avem spatiu pt \n
+        ///verificam daca mai avem spatiu pt \0
     if(i == len){
             
             len++;
