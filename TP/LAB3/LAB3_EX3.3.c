@@ -51,6 +51,7 @@ stiva_t *create_stack(){
 
 stiva_t *push(stiva_t *st){/// Problem can't read string with white spaces " "
 
+    char aux[32]="";
     //NULL check
     if(st == NULL){
         myerr("Stack not initialized!");
@@ -59,10 +60,17 @@ stiva_t *push(stiva_t *st){/// Problem can't read string with white spaces " "
     stiva_t *nou = create_stack();
 
     printf("Introduceti modificarea:");
-    scanf("%100s",nou->modif.text);
-    //getchar();
+    fgets(nou->modif.text,100,stdin);
+
+    if(nou->modif.text[strlen(nou->modif.text)-1] == '\n'){
+        nou->modif.text[strlen(nou->modif.text)-1] = 0;
+    }
+    //printf("%s\n", nou->modif.text);
+
     printf("La randul?:");
     scanf("%u", &nou->modif.row);
+    fgets(aux,32,stdin);
+
     nou->next = st;
 
     return nou;
@@ -80,7 +88,7 @@ void undo(stiva_t **st){
 
 void stack_log(stiva_t *st){
     
-    printf("%s - row %u", st->modif.text, st->modif.row);
+    printf("%s - row %u\n", st->modif.text, st->modif.row);
 }
 
 
