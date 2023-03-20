@@ -1,0 +1,29 @@
+Rând 1
+
+1.     Folosind câmpuri pe biți, definiți o structură pentru memorarea următoarelor informații despre filme:
+
+-numele filmului: șir de maxim 35 caractere
+
+-anul apariției: numar intreg, maxim 2023
+
+-premii: da/nu
+
+Definiți structura în așa fel încât să ocupe spațiul minim de memorie posibil. Cu ajutorul structurii să se salveze într-un vector de structuri  alocat dinamic informații despre mai multe filme. Să se citească de la tastatură informațiile despre filme și la final să se afișeze vectorul. Să se sorteze vectorul creat, folosind funcția qsort, astfel încât pe primele poziții din vector să se afle filmele care au fost premiate.
+
+2.    Se citesc de la tastatură un număr n și o matrice pătratică de dimensiune n. Pe urmă se citește un vector. Verificați dacă vectorul apare în matrice pe orizontală spre stânga sau spre dreapta.
+
+
+Rând 2
+
+1.     Folosind câmpuri pe biți, definiți o structură pentru memorarea următoarelor informații despre un grup de angajați:
+
+-numele angajatului: șir de maxim 45 caractere
+
+-anul nașterii
+
+-bonus: da/nu
+
+Definiți structura în așa fel încât să ocupe spațiul minim de memorie posibil. Cu ajutorul structurii să se salveze intr-un vector de structuri  alocat dinamic informații despre mai multi angajați. Să se citească de la tastatură informațiile despre angajați și la final să se afișeze vectorul. Să se sorteze vectorul creat, folosind funcția qsort, în ordine alfabetică după nume.
+
+2.     Se citesc de la tastatură un număr n și o matrice patratică n. Pe urmă se citește un vector. Verificați dacă vectorul apare în matrice pe verticală în sus sau în jos. 
+
