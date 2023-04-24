@@ -166,6 +166,15 @@ void inseare_cresc(List *lst, int data){
     Node_t prev = NULL;
     Node_t nou = nou_nod(data,NULL);
 
+    if(lst == NULL){
+        return;
+    }
+
+    if((lst->prim == NULL) || (lst->ultim == NULL)){
+        lst->prim = lst->ultim = nou;
+        return;
+    }
+
     if(curr->next == NULL){
         if(data <= curr->data){
             nou->next = curr;
@@ -194,28 +203,55 @@ void inseare_cresc(List *lst, int data){
             curr->next = nou;
             lst->ultim = nou;
         }
+        else{
+            nou->next = curr;
+            prev->next = nou;
+        }
         return;
     }
 
 }
 
+List sort_list(List *lst){
+    List New;
+    init(&New);
+
+    Node_t curr = lst->prim;
+    while(curr != NULL){
+        //printf("%d\n",curr->data);
+        inseare_cresc(&New,curr->data);
+        curr=curr->next;
+    }
+
+    return New;
+}
+
+void sterge_lista(List *lst){
+    Node_t iterator = lst->prim;
+    while(iterator != NULL){
+        Node_t tmp = iterator->next;
+        free(iterator);
+        iterator = tmp;
+    }
+}
+
 
 int main(int argc, char *argv[]){
     
-    List lst1;//, lst2, lst3;
+    List lst1,L, lst2; //, lst3;
     init(&lst1);
     //init(&lst2);
     //init(&lst3);
 
-    add_back(&lst1,1);
+    //add_back(&lst1,1);
     //add_back(&lst1,2);
     //add_back(&lst1,3);
     //add_back(&lst1,4);
    // add_back(&lst1,5);
-   // add_back(&lst2,7);
-   // add_back(&lst2,1);
-   // add_back(&lst2,3);
-  //  add_back(&lst2,7);
+    add_back(&lst2,7);
+    add_back(&lst2,1);
+    add_back(&lst2,3);
+    add_back(&lst2,7);
 
     //afisare_lista(&lst1);
     //printf("\n");
@@ -224,11 +260,18 @@ int main(int argc, char *argv[]){
     //reuniune(&lst3, &lst1, &lst2);
     //afisare_lista(&lst3);
     //printf("\nListele sunt:%d\n", liste_egale(&lst1,&lst2));
-    inseare_cresc(&lst1,-1);
-    inseare_cresc(&lst1,8);
-    inseare_cresc(&lst1,12);
-    inseare_cresc(&lst1,5);
-    afisare_lista(&lst1);
+    //inseare_cresc(&lst1,-1);
+    //inseare_cresc(&lst1,8);
+    //inseare_cresc(&lst1,12);
+    //inseare_cresc(&lst1,5);
+    //afisare_lista(&lst1);
+
+    init(&L);
+    L = sort_list(&lst2);
+    afisare_lista(&L);
+    sterge_lista(&L);
+    sterge_lista(&lst2);
+    
 
     return 0;
 }
