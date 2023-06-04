@@ -86,9 +86,9 @@ void Delete(int ***arr, int rows){
 }
 
 void swap(int *a, int *b){
-    int *tmp = a;
+    int tmp = *a;
     *a = *b;
-    *b = *tmp;
+    *b = tmp;
 }
 
 void Simetric_Change(int ***arr, unsigned const int n){
@@ -96,8 +96,8 @@ void Simetric_Change(int ***arr, unsigned const int n){
         err("NULL MATRIX");
 
     for(int i = 0; i < n; i++){
-        for(int j = i + 1; j < i; j++){
-            swap( &(*(*(*arr + i) + j)) , &(*(*(*arr + j) + i)) ) ;
+        for(int j = 0; j < i; j++){
+            swap(&*(*(*arr + i) + j) , &*(*(*arr + j) + i)) ;
         }
     }
     
@@ -106,7 +106,7 @@ void Simetric_Change(int ***arr, unsigned const int n){
 int main(){
 
     int **a = NULL;
-    int n,m;
+    int n;
 
     printf("n = "), scanf("%d",&n);
 
@@ -119,7 +119,7 @@ int main(){
     Simetric_Change(&a, n);
     printf("\n");
     Print(&a, n);
-    
+
     Delete(&a, n);
 
     return 0;
