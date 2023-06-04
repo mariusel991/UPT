@@ -105,6 +105,7 @@ void exista_submatrice(int ***a, int ***b, unsigned int n, unsigned int m, int *
             int aux = 1;
             for(int x = 0; x < m; x++){
                 for(int y = 0; y < m; y++){
+                    /// *(*((*b + x) + y)) != *(*((*a + (i + x)) + (j + y))) - echivalent in pointeri
                     if((*b)[x][y] != (*a)[i + x][j + y]){
                         aux = 0;
                         break;
