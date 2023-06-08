@@ -30,7 +30,7 @@ int forma_lit(int n){
         return forma_lit(n % 10);
     }
     else if(n >= 10 && n < 20){
-        printf(" %s\n",zeci1[n/10 - 1]);
+        printf(" %s\n",zeci1[n%10 - 1]);
         return 1;
     }
     else if (n < 10){
