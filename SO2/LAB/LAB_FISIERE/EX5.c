@@ -111,7 +111,7 @@ int main(int argc, char **argv){
             printf("%d ", sb.st_uid);
         }
         if(a_dim){
-            printf("%ld ", sb.st_size);
+            printf("ld bytes ", sb.st_size);
         }
         if(last_modif){
             printf("%s ", ctime(&sb.st_mtime));
