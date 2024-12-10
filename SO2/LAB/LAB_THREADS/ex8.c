@@ -27,7 +27,7 @@ fiecare thread care isi termina executia
 #include <pthread.h>
 #include <ctype.h>
 
-#define TH_N 16
+// #define TH_N 2
 #define CHUNK 128
 
 #define IS_JOINED(th_data, th_id) ((th_data[th_id].toJoin == 0) ? 1 : 0)
@@ -49,9 +49,11 @@ typedef struct thread_data{
 
 }thread_data;
 
-thread_data th_data[TH_N];
+thread_data *th_data = NULL;
+int TH_N = 0;
 
 void th_data_init(){
+
     for(int i = 0; i < TH_N; i++){
         th_data[i].th_id = i;
         th_data[i].active = 0;
@@ -124,11 +126,26 @@ void *th_func(void *arg){
     pthread_mutex_lock(&mutexData);
     th_data[data->th_id].active = 0;
     th_data[data->th_id].toJoin = 1;
+    // printf("Gata TH_%d\n", data->th_id);
     pthread_mutex_unlock(&mutexData);
 
-    // printf("Gata TH_%d\n", data->th_id);
 
     return NULL;
+}
+
+void print_hisogram(){
+    
+    for(int i = '0'; i <= '9'; i++){
+        printf("'%c':%d\n", i , vf[i]);
+    }
+
+    for(int i = 'A'; i <= 'Z'; i++){
+        printf("'%c':%d\n", i , vf[i]);
+    }
+
+    for(int i = 'a'; i <= 'z'; i++){
+        printf("'%c':%d\n", i , vf[i]);
+    }
 }
 
 int main(int argc, char **argv){
@@ -138,26 +155,46 @@ int main(int argc, char **argv){
         exit(EXIT_FAILURE);
     }
 
-    int N = atoi(argv[2]);
+    TH_N = atoi(argv[2]);
     char *file = argv[1];
     struct stat sb;
-    pthread_t thread[TH_N];
+    pthread_t *thread = NULL;
 
     memset(vf,0,sizeof(vf));
-    th_data_init();
-    pthread_mutex_init(&mutexData, NULL);
+    th_data = (thread_data *)calloc(TH_N,sizeof(thread_data));
 
-    char **str = aloc_matrix(N,CHUNK);
-    if (!str){
+    if(!th_data){
         fprintf(stderr,"out of mem\n");
         pthread_mutex_destroy(&mutexData);
         exit(EXIT_FAILURE);
     }
 
+    thread = (pthread_t *)calloc(TH_N,sizeof(pthread_t));
+    if (!thread){
+        fprintf(stderr,"out of mem\n");
+        pthread_mutex_destroy(&mutexData);
+        free(th_data);
+        exit(EXIT_FAILURE);
+    }
+
+    th_data_init();
+    pthread_mutex_init(&mutexData, NULL);
+
+    char **str = aloc_matrix(TH_N,CHUNK);
+    if (!str){
+        fprintf(stderr,"out of mem\n");
+        pthread_mutex_destroy(&mutexData);
+        free(th_data);
+        free(thread);
+        exit(EXIT_FAILURE);
+    }
+
     if (lstat(file,&sb) < 0){
         perror("lstat");
-        destroy_mat(&str, N);
+        destroy_mat(&str, TH_N);
         pthread_mutex_destroy(&mutexData);
+        free(th_data);
+        free(thread);
         exit(EXIT_FAILURE);
     }
 
@@ -166,7 +203,9 @@ int main(int argc, char **argv){
 
     if (fd < 0){
         perror("open");
-        destroy_mat(&str, N);
+        destroy_mat(&str, TH_N);
+        free(th_data);
+        free(thread);
         pthread_mutex_destroy(&mutexData);
         exit(EXIT_FAILURE);
     }
@@ -195,11 +234,13 @@ int main(int argc, char **argv){
 
 
         if (!IS_JOINED(th_data,th_id)){
-            printf("JOIN_TH_%d\n", th_id);
+            // printf("JOIN_TH_%d\n", th_id);
             if ((ret = pthread_join(thread[th_id], NULL)) < 0){
             fprintf(stderr,"%s\n", strerror(ret));
-            destroy_mat(&str, N);
+            destroy_mat(&str, TH_N);
             pthread_mutex_destroy(&mutexData);
+            free(th_data);
+            free(thread);
             close(fd);
             exit(EXIT_FAILURE);
             }
@@ -207,16 +248,18 @@ int main(int argc, char **argv){
             th_data->toJoin = 0;
         }
 
-        printf("REUSE TH_%d\n", th_id);
+        // printf("REUSE TH_%d\n", th_id);
         if ((ret = pthread_create(&thread[th_id], NULL, &th_func, &th_data[th_id])) < 0){
             fprintf(stderr,"%s\n", strerror(ret));
-            destroy_mat(&str, N);
+            destroy_mat(&str, TH_N);
             pthread_mutex_destroy(&mutexData);
+            free(th_data);
+            free(thread);
             close(fd);
             exit(EXIT_FAILURE);
         }
 
-        printf("Left : %ld\n", workLeft);
+        // printf("Left : %ld\n", workLeft);
         workLeft -= bytes;
     }
 
@@ -224,15 +267,17 @@ int main(int argc, char **argv){
 
     // JOIN 
     for(int i = 0; i < TH_N; i++){
-        if (th_data[i].toJoin){
-            if ((ret = pthread_join(thread[i], NULL)) < 0){
-            fprintf(stderr,"%s\n", strerror(ret));
-            }
+        if ((ret = pthread_join(thread[i], NULL)) < 0){
+        fprintf(stderr,"%s\n", strerror(ret));
         }
     }
 
-    destroy_mat(&str, N);
+    print_hisogram();
+
+    destroy_mat(&str, TH_N);
     pthread_mutex_destroy(&mutexData);
+    free(th_data);
+    free(thread);
     close(fd);
 
     return 0;
