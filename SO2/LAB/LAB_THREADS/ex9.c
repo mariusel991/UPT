@@ -54,9 +54,8 @@ void *th_func(void *arg){
     pthread_mutex_lock(&mutexData);
     busy_th--;
     total_size -= args->buf_size;
-    if(busy_th >= 0){
-        pthread_cond_signal(&cond);
-    }
+    pthread_cond_signal(&cond);
+
     pthread_mutex_unlock(&mutexData);
 
     free(args->buf);
